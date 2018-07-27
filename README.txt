@@ -3,3 +3,7 @@ Found solution on: https://community.atlassian.com/t5/Sourcetree-questions/Sourc
 
 Specifically, in the terminal I typed in:
 git config --global credential.helper osxkeychain
+
+```py
+import numpy as np
+```
