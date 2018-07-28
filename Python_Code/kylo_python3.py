@@ -7,17 +7,23 @@ import time #for time delay
 
 #==============================================
 # Serial Port Parameters
-port = "com6"
+# port = "com6"
+port = "/dev/ptyp1"
 ser = serial.Serial(port, baudrate=115200, parity='N', 
 					bytesize=8, stopbits=1, timeout=1, xonxoff=0, rtscts=0)
 
-#==============================================
+##==============================================
 # Functions
+# def umon_write( my_command ):
+# 	my_command = my_command + '\n'
+# 	for k in range( len(my_command) ):
+# 		ser.write(my_command[k].encode())
+# 		# time.sleep(0.01) #need to add delay between writing characters		
+
 def umon_write( my_command ):
-	my_command = my_command + '\n'
-	for k in range( len(my_command) ):
-		ser.write(my_command[k].encode('utf-8'))
-		time.sleep(0.01) #need to add delay between writing characters		
+	ser.write(my_command.encode())
+
+
 
 def umon_read( ser_inst, echo=1 ):
 	tmp = ser_inst.readline() #readline for serial instantiation
@@ -28,7 +34,7 @@ def umon_read( ser_inst, echo=1 ):
 		print(tmp)
 	return tmp
 
-#==============================================	
+##==============================================	
 #Some flags/variables
 fpga_version_check = "c0000000 w@ ."
 start_ADC1 = "1 c00c0000 w!"
@@ -38,15 +44,36 @@ check_ADC1_done = "c00d0000 w@ ."
 check_ADC2_done = "c00d0000 w@ ."
 
 #Set umon to interpret hex numbers/addresses
-umon_write("hex")
-umon_read( ser, echo=0 ) #clear the read buffer, but don't echo
+
+str  =     "Hello {0}             World {0}"
+str2 = "\r\nThis  {0}             Sucks {0}" 
+	
+for k in range(20):	
+	umon_write("\033[0;0H")
+	umon_write(str.format(k))
+	umon_write(str2.format(k))
+	umon_write("\033[0;0H")
+	time.sleep(0.5)
+
+# for k in range(50):	
+# 	ser.write("\033[0;0H".encode())
+# 	ser.write(str.format(k).encode())
+# 	ser.write(str2.format(k).encode())
+# 	ser.write("\033[0;0H".encode())	
+# 	time.sleep(.1)
+	
+# umon_read( ser, echo=1 ) #clear the read buffer, but don't echo
+# for k in range(20):
+# 	umon_write("\r\n")
+umon_write("\033c")
+# umon_write( chr(27) + "[2J" )
 
 #DEBUG
 #Check all umon commands
 # umon_write("words")
 # umon_read( ser )
 # print() #print new line
-#==============================================	
+##==============================================	
 
 #Check FPGA version number
 umon_write( fpga_version_check )
