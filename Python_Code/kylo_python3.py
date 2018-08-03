@@ -8,7 +8,7 @@ import time #for time delay
 #==============================================
 # Serial Port Parameters
 # port = "com6"
-port = "/dev/ptyp1"
+port = "/dev/ttyp3"
 ser = serial.Serial(port, baudrate=115200, parity='N', 
 					bytesize=8, stopbits=1, timeout=1, xonxoff=0, rtscts=0)
 
@@ -47,9 +47,10 @@ check_ADC2_done = "c00d0000 w@ ."
 
 str  =     "Hello {0}             World {0}"
 str2 = "\r\nThis  {0}             Sucks {0}" 
-	
+
+time.sleep(1)
+# umon_write("\033[0;0H")	
 for k in range(20):	
-	umon_write("\033[0;0H")
 	umon_write(str.format(k))
 	umon_write(str2.format(k))
 	umon_write("\033[0;0H")
